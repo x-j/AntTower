@@ -1,8 +1,0 @@
-public class Tower {
-
-    int x, y; //position
-    int damages;
-    int area; //the shooting area around the tower
-    int level; 
-
-}
