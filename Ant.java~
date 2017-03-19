@@ -1,0 +1,8 @@
+public class Ant {
+
+    bool first; //if it's the first
+    int x, y; //position
+    bool crazy; //true if it moves randomly
+    int steps; //number of steps traveled
+
+}

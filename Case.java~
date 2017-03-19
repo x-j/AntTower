@@ -1,0 +1,17 @@
+public class Case {
+
+    bool in; //false if it's a border
+    int pheromones;
+    Case [5] neighbours; //0-top 1-top_r 2-right 3-bot_r 4-bot
+    bool t; //if there is a tower
+    Tower tower;
+
+    public Case next_random(){
+	return this;
+    }
+
+    public Case next_best(){
+	return this;
+    }
+
+}

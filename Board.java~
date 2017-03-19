@@ -1,0 +1,10 @@
+public class Board {
+    
+    int n, m; //dimensions
+    Case [][] cases;
+    int xStart, yStart;
+    int xStop, yStop;
+
+
+
+}
