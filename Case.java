@@ -1,3 +1,4 @@
+import java.util.*;
 import java.lang.Math;
 
 public class Case {
@@ -9,6 +10,7 @@ public class Case {
     Case [] around; //0-top 1-top_r 2-right 3-bot_r 4-bot
     boolean t; //if there is a tower
     Tower tower;
+    List<Ant> list = new ArrayList<Ant>();
 
     public Case(int x, int y){
 	this.x = x;
@@ -32,7 +34,7 @@ public class Case {
     }
 
     public Case next_random(){
-	int i = (int)(Math.random()*5)
+	int i = (int)(Math.random()*5);
 	return this.around[i];
     }
 
