@@ -1,9 +1,12 @@
+import java.util.*;
+
 public class Board {
     
     int n, m; //dimensions
     Case [][] cases;
     int xStart, yStart;
     int xStop, yStop;
+    ArrayList <Ant> ants;
 
     public Board(int n, int m){
 	cases = new Case[n+2][m+1];
@@ -11,6 +14,7 @@ public class Board {
 	yStart = 0;
 	xStop = n+1;
 	yStop = m;
+	ants = new ArrayList<Ant>();
     }
 
     public Board(int n, int m, int _xStart, int _yStart, int _xStop, int _yStop){
@@ -19,6 +23,7 @@ public class Board {
 	yStart = _yStart;
 	xStop = _xStop;
 	yStop = _yStop;
+	ants = new ArrayList<Ant>();
     }
 
 }

@@ -1,7 +1,7 @@
 public class Ant {
 
     Board board;
-    boolean first; //if it's the first
+    boolean first; //true if it's the first
     int x, y; //position
     boolean crazy; //true if it moves randomly
     int steps; //number of steps traveled

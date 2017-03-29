@@ -1,3 +1,5 @@
+import java.lang.Math;
+
 public class Case {
 
     Board board;
@@ -30,11 +32,35 @@ public class Case {
     }
 
     public Case next_random(){
-	return this;
+	int i = (int)(Math.random()*5)
+	return this.around[i];
     }
 
     public Case next_best(){
-	return this;
+
+	double total = (double)total_next();
+	double [] p = new double[5];
+	int i;
+
+	for(i = 0; i< 5; i++)
+	    p[i] = (double)(this.around[i].pheromones)/total;
+
+	double random = Math.random(); //random number (double) between 0 and 1
+	i = 0;
+	double cumulate_p = p[0];
+
+	while(!(random < cumulate_p) && i<5)
+	    cumulate_p += p[++i];
+	
+	return this.around[i];
+    }
+    
+    //total number of pheromones on the five next possible case
+    public int total_next(){ 
+	int total = 0;
+	for(int i = 0; i<5; i++)
+	    total += this.around[i].pheromones;
+	return total;
     }
 
 }
