@@ -16,8 +16,14 @@ public class Board {
 	nb_ants = 0;
     }*/
 
-    public Board(int n, int m, int _xStart, int _yStart, int _xStop, int _yStop){
+    public Board(int _n, int _m, int _xStart, int _yStart, int _xStop, int _yStop){
+
+	n = _n;
+	m = _m;
 	cases = new Case[n+2][m+1];
+	for(int i = 0; i < n+2; i++)
+	    for(int j = 0; j < m+1; j++)
+		cases[i][j] = new Case(i,j,this);
 	xStart = _xStart;
 	yStart = _yStart;
 	xStop = _xStop;
