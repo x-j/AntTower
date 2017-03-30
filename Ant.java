@@ -2,43 +2,35 @@ public class Ant {
 
     Board board;
     boolean first; //true if it's the first
-    int x, y; //position
+    Case current;
     boolean crazy; //true if it moves randomly
     int steps; //number of steps traveled
-    int life;
+    boolean alive;
 
-    public Ant(boolean first){
-	first = true;
-	x = board.xStart;
-	y = board.yStart;
-	crazy = true;
+    public Ant(boolean _first,boolean _crazy, Board _board){
+	first = _first;
+	board = _board;
+	current = board.cases[board.xStart][board.yStart]; //starting case
+	crazy = _crazy;
 	steps = 0;
-	life = 100;
+	alive = true;
     }
 
-    public Ant(int x, int y, boolean crazy){
-	first = false;
-	this.x = x;
-	this.y = y;
-	crazy = true;
-	steps = 0;
-	life = 100;
+
+    public boolean getCrazy(){return crazy;}
+    public void setCrazy(boolean b){crazy = b;}
+
+    public boolean getFirst(){return first;}
+    public void setFirst(boolean b){first = b;}
+
+    public void stepAnts(){
+	current = this.current.next(this.crazy);
+	return;
     }
 
-    public boolean getCrazy(){
-	return crazy;
+    public void killed(){
+	alive = false;
+	current.ants.remove(this);
+	board.setNbAnts();
     }
-
-    public void setCrazy(boolean b){
-	crazy = b;
-    }
-
-    public boolean getFirst(){
-	return first;
-    }
-
-    public void setFirst(boolean b){
-	first = b;
-    }
-
 }

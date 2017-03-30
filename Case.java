@@ -1,5 +1,5 @@
-import java.util.*;
 import java.lang.Math;
+import java.util.*;
 
 public class Case {
 
@@ -10,11 +10,17 @@ public class Case {
     Case [] around; //0-top 1-top_r 2-right 3-bot_r 4-bot
     boolean t; //if there is a tower
     Tower tower;
-    List<Ant> list = new ArrayList<Ant>();
+    ArrayList <Ant> ants;
 
-    public Case(int x, int y){
-	this.x = x;
-	this.y = y;
+    public Case(int _x, int _y, Board _board){
+	board = _board;
+	x = _x;
+	y = _y;
+	//if the case is a border
+	if((x == 0) || (x == board.n+1) || (y == board.m)){
+	    in = false;
+	    return;
+	}
 	in = true; //not a border
 	pheromones = 0;
 	around = new Case[5];
@@ -23,14 +29,26 @@ public class Case {
 	around[2] = board.cases[x][y+1];
 	around[3] = board.cases[x+1][y+1];
 	around[4] = board.cases[x+1][y];
-	t = false;	
+	t = false;
+	ants = new ArrayList<Ant>();
     }
 
-    //in the case of a border
-    public Case(int x, int y, boolean in){
-	this.x = x;
-	this.y = y;
-	in = false;	
+    public void addAnt(Ant _ant){
+	ants.add(_ant);
+    }
+
+    public void stepCase(){
+	for(Ant a : ants)
+	    a.stepAnts();
+	if(t)
+	    tower.stepTower();
+    }
+
+    public Case next(boolean crazy){
+	if(crazy)
+	    return next_random();
+	else
+	    return next_best();
     }
 
     public Case next_random(){
