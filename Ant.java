@@ -29,6 +29,7 @@ public class Ant {
     public boolean getFirst(){return first;}
     public void setFirst(boolean b){first = b;}
 
+    //function executed for a step of an ant
     public void stepAnts(){
 	current.ants.remove(this);
 	current = this.current.next(this.crazy);
@@ -38,12 +39,14 @@ public class Ant {
 	return;
     }
 
+    //kill the ant
     public void killed(){
 	alive = false;
 	current.ants.remove(this);
 	board.setNbAnts();
     }
 
+    //when the ant reach the stop, pheromones are set on its path
     public void finished(){
 	for(Case c : traveled_case)
 	    c.setPheromones(pheromones/steps);

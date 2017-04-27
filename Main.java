@@ -4,17 +4,17 @@ public class Main{
 
     public static void main (String[] args){
 
-	//*
-	  int n = 100;
-	  int m = 100;
-	  int xStart = 1;
-	  int yStart = 1;
-	  int xStop = 50;
-	  int yStop = 96;
-	  Board board = new Board(n,m,xStart,yStart,xStop,yStop);
-	  //*/
+	/*
+	int n = 100;
+	int m = 100;
+	int xStart = 1;
+	int yStart = 1;
+	int xStop = 50;
+	int yStop = 96;
+	Board board = new Board(n,m,xStart,yStart,xStop,yStop);
+	*/
 
-	  //Board board = askInfo();
+	Board board = askInfo();
 	board.cases[board.xStart][board.yStart].addAnt(new Ant(true,true,board)); //the first ant
 	board.stepBoard();
     }
