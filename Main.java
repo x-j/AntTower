@@ -4,19 +4,20 @@ public class Main{
 
     public static void main (String[] args){
 
-	/*
-	int n = 100;
-	int m = 100;
-	int xStart = 1;
-	int yStart = 1;
-	int xStop = 50;
-	int yStop = 96;
-	Board board = new Board(n,m,xStart,yStart,xStop,yStop);
-	*/
 
-	Board board = askInfo();
-	board.cases[board.xStart][board.yStart].addAnt(new Ant(true,true,board)); //the first ant
-	board.stepBoard();
+	int n = 10;
+	int m = 10;
+	int xStart = 0;
+	int yStart = 0;
+	int xStop = 9;
+	int yStop = 9;
+	Board board = new Board(n,m,xStart,yStart,xStop,yStop);
+	
+
+	//Board board = askInfo();
+	//	board.cases[board.xStart][board.yStart].addAnt(new Ant(true,true,board)); //the first ant
+	//	board.stepBoard();
+	board.run();
     }
 
     public static Board askInfo(){
@@ -34,7 +35,7 @@ public class Main{
 	System.out.println("Enter the start position (xStart,yStart)");
 	System.out.print("value of xStart : ");
 	xStart = sc.nextInt();
-	while((xStart < 1) || (xStart > n)){
+	while((xStart < 0) || (xStart > n-1)){
 	    System.out.println("Wrong value of xStart, retry (0 < xStart < "+(n+1)+")");
 	    System.out.print("value of xStart : ");
 	    xStart = sc.nextInt();
@@ -50,7 +51,7 @@ public class Main{
 	System.out.println("Enter the stop position (xStop,yStop)");
 	System.out.print("value of xStop : ");
 	xStop = sc.nextInt();
-	while((xStop < 1) || (xStop > n)){
+	while((xStop < 0) || (xStop > n-1)){
 	    System.out.println("Wrong value of xStop, retry (0 < xStop < "+(n+1)+")");
 	    System.out.print("value of xStop : ");
 	    xStop = sc.nextInt();

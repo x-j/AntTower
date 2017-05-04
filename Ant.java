@@ -4,7 +4,8 @@ public class Ant {
 
     Board board;
     boolean first; //true if it's the first
-    Case current;
+    Case current; //the current case
+    Case previous; // the previous case
     boolean crazy; //true if it moves randomly
     int steps; //number of steps traveled
     boolean alive;
@@ -20,6 +21,7 @@ public class Ant {
 	steps = 0;
 	alive = true;
 	traveled_case = new ArrayList <Case>();
+	previous = null;
     }
 
 
@@ -31,18 +33,22 @@ public class Ant {
 
     //function executed for a step of an ant
     public void stepAnts(){
+	previous = current;
 	current.ants.remove(this);
-	current = this.current.next(this.crazy);
+	current.ants.trimToSize();
+	current = this.current.next(this.crazy,this.previous);
 	current.ants.add(this);
 	traveled_case.add(current);
 	steps++;
-	return;
+	if((current.x == board.xStop) && (current.y == board.yStop))
+	    this.finished();
     }
 
     //kill the ant
     public void killed(){
 	alive = false;
 	current.ants.remove(this);
+	current.ants.trimToSize();
 	board.setNbAnts();
     }
 
