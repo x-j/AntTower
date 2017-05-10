@@ -9,11 +9,12 @@ public class Ant {
     boolean crazy; //true if it moves randomly
     int steps; //number of steps traveled
     boolean alive;
-    int pheromones;
-    ArrayList <Case> traveled_case;
+    int pheromones; //amount of pheromones that the ant transport
+    boolean moved; // if it moved this round
+    ArrayList <Case> traveled_case; //list of traveled cases
 
     public Ant(boolean _first,boolean _crazy, Board _board){
-	pheromones = 1000;
+	pheromones = 100;
 	first = _first;
 	board = _board;
 	current = board.cases[board.xStart][board.yStart]; //starting case
@@ -22,6 +23,7 @@ public class Ant {
 	alive = true;
 	traveled_case = new ArrayList <Case>();
 	previous = null;
+	moved = false;
     }
 
 
@@ -33,29 +35,35 @@ public class Ant {
 
     //function executed for a step of an ant
     public void stepAnts(){
-	previous = current;
-	current.ants.remove(this);
-	current.ants.trimToSize();
-	current = this.current.next(this.crazy,this.previous);
-	current.ants.add(this);
-	traveled_case.add(current);
-	steps++;
-	if((current.x == board.xStop) && (current.y == board.yStop))
-	    this.finished();
-    }
+	if(!moved){
+	    int x = current.x;
+	    int y = current.y;
+	    current.ants.remove(this);
+	    current.ants.trimToSize();
+	    current = this.current.next(this.crazy,this.previous);
+	    previous = this.board.cases[x][y];
+	    current.ants.add(this);
+	    if(current != board.cases[board.xStart][board.yStart]){
+		traveled_case.add(current);
+		steps++;
+	    }
+	    moved = true;
+	    if((current.x == board.xStop) && (current.y == board.yStop))
+		this.finished();
+	}
+     }
 
-    //kill the ant
-    public void killed(){
-	alive = false;
-	current.ants.remove(this);
-	current.ants.trimToSize();
-	board.setNbAnts();
-    }
+     //kill the ant
+     public void killed(){
+	 alive = false;
+	 current.ants.remove(this);
+	 current.ants.trimToSize();
+     }
 
-    //when the ant reach the stop, pheromones are set on its path
-    public void finished(){
-	for(Case c : traveled_case)
-	    c.setPheromones(pheromones/steps);
-	this.killed();
-    }
-}
+     //when the ant reach the stop, pheromones are set on its path
+     public void finished(){
+	 for(Case c : traveled_case)
+	     c.setPheromones(pheromones/steps);
+	 this.killed();
+     }
+ }
