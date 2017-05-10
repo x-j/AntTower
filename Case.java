@@ -50,7 +50,7 @@ public class Case {
 	    around[3] = board.cases[x][y+1];
 
 	//around[4]
-	if((x == board.n-1) || (y == board.n-1))
+	if((x == board.n-1) || (y == board.m-1))
 	    around[4] = null;
 	else
 	    around[4] = board.cases[x+1][y+1];
@@ -138,10 +138,11 @@ public class Case {
 	    random = Math.random(); //random number (double) between 0 and 1
 	    i = 0;
 	    cumulate_p = p[0];
-	    
 	    //select one case regarding to the amount of pheromones
-	    while((random >= cumulate_p) && i<7)
+	    while((random >= cumulate_p) && i<7 && cumulate_p<1)
 		cumulate_p += p[++i];
+	    if(cumulate_p == 1 && this.around[i] == previous)
+		return next_random(previous);
 	}while(this.around[i] == null || this.around[i] == previous);
 
 	return this.around[i];
