@@ -53,11 +53,11 @@ public class Board {
 		}
 	    }
 	    // feel free to remove the delay below
-	    try {
+	    /*try {
 		Thread.sleep(500);
 	    } catch (InterruptedException e) {
 		e.printStackTrace();
-	    }
+		}*/
 	}
     }
 
