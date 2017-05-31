@@ -41,7 +41,8 @@ public class Board {
 	    for (int j = 0; j < m; j++)
 		System.out.format("%4d|%-5.3f%-3s",
 				  this.cases[i][j].ants.size(),
-				  (float) (this.cases[i][j].pheromones * 100) / nbPheromones(), "% ");
+				  this.cases[i][j].pheromones, "% ");
+				  //(float) (this.cases[i][j].pheromones * 100) / nbPheromones(), "% ");
 	    System.out.print("\n");
 	}
 	if (useGui) {
@@ -49,7 +50,7 @@ public class Board {
 	    for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
 		    view.getCells()[j][i].setText("" + this.cases[i][j].ants.size());
-		    view.getCells()[j][i].setColorIntensity(((float) (this.cases[i][j].pheromones)) / nbPheromones());
+		    view.getCells()[j][i].setColorIntensity(((float) (this.cases[i][j].pheromones)));
 		}
 	    }
 	    // feel free to remove the delay below
@@ -62,6 +63,9 @@ public class Board {
     }
 
     public void stepBoard() {
+
+	double coeff_evaporation = 0.96;
+
 	for (int i = 0; i < n; i++)
 	    for (int j = 0; j < m; j++)
 		cases[i][j].stepCase();
@@ -76,9 +80,13 @@ public class Board {
 	    cases[xStart][yStart].addAnt(new Ant(false, true, this));
 	else
 	    cases[xStart][yStart].addAnt(new Ant(false, false, this));
+
+	for (int ii = 0; ii < n; ii++)
+	    for (int jj = 0; jj < m; jj++)
+		cases[ii][jj].evaporation(coeff_evaporation);
     }
 
-    public int nbPheromones() {
+ /*   public int nbPheromones() {
 	int result = 0;
 	for (int i = 0; i < n; i++)
 	    for (int j = 0; j < m; j++)
@@ -87,6 +95,7 @@ public class Board {
 	    return 1;
 	return result;
     }
+ */
 
     public void run() {
 	this.cases[this.xStart][this.yStart].addAnt(new Ant(true, true, this));

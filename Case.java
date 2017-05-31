@@ -5,7 +5,7 @@ public class Case {
 
     Board board;
     int x, y; //position
-    int pheromones; //amount of pheromones on this case
+    double pheromones; //amount of pheromones on this case
     Case [] around; //0-topL 1-top 2-topR 3-right 4-botR 5-bot 6-botL 7-left
     boolean t; //true if there is a tower
     Tower tower;
@@ -17,7 +17,7 @@ public class Case {
 	x = _x;
 	y = _y;
 
-	pheromones = 0; // 0 pheromone by default
+	pheromones = 0.0; // 0 pheromone by default
 	around = new Case[8]; //set of the array of the "neighbour cases"
 	t = false; //no tower by default
 	ants = new ArrayList<Ant>(); //empty list of ants by default
@@ -30,43 +30,36 @@ public class Case {
 	    around[0] = null;
 	else
 	    around[0] = board.cases[x-1][y-1];
-
 	//around[1]
 	if((x == 0))
 	    around[1] = null;
 	else
 	    around[1] = board.cases[x-1][y];
-
 	//around[2]
 	if((x == 0) || (y == board.m-1))
 	    around[2] = null;
 	else
 	    around[2] = board.cases[x-1][y+1];
-
 	//around[3]
 	if((y == board.m-1))
 	    around[3] = null;
 	else
 	    around[3] = board.cases[x][y+1];
-
 	//around[4]
 	if((x == board.n-1) || (y == board.m-1))
 	    around[4] = null;
 	else
 	    around[4] = board.cases[x+1][y+1];
-
 	//around[5]
 	if((x == board.n-1))
 	    around[5] = null;
 	else
 	    around[5] = board.cases[x+1][y];
-
 	//around[6]
 	if((x == board.n-1) || (y == 0))
 	    around[6] = null;
 	else
 	    around[6] = board.cases[x+1][y-1];
-
 	//around[7]
 	if((y == 0))
 	    around[7] = null;
@@ -74,8 +67,13 @@ public class Case {
 	    around[7] = board.cases[x][y-1];
     }
 
+    public void evaporation(double p){
+	if(this.pheromones != 0) 
+	    this.pheromones = this.pheromones * p;
+    }
+
     //add p pheromones
-    public void setPheromones(int p){pheromones += p;}
+    public void setPheromones(double p){pheromones += p;}
 
     //add an ant in this case
     public void addAnt(Ant _ant){ants.add(_ant);this.board.nb_ants++;}
@@ -118,7 +116,8 @@ public class Case {
     //in the "neighbour cases" to choose the best one
     public Case next_best(Case previous){
 
-	double total = (double)total_next();
+	double alpha = 1.0;
+	double total = total_next(alpha);
 	if(total == 0)
 	    return next_random(previous);
 	double [] p = new double[8];
@@ -130,9 +129,12 @@ public class Case {
 	    }else{
 		if(this.around[i] == this.board.cases[this.board.xStop][this.board.yStop])
 		    return this.around[i];
-		p[i] = (double)(this.around[i].pheromones)/total;
+		p[i] = Math.pow(this.around[i].pheromones,alpha)/total;
 	    }
 	}
+
+	//ici
+
 	double random, cumulate_p;
 	do{	    
 	    random = Math.random(); //random number (double) between 0 and 1
@@ -149,11 +151,20 @@ public class Case {
     }
     
     //total number of pheromones on the eight next possible case
-    public int total_next(){ 
-	int total = 0;
+    public double total_next(){ 
+	double total = 0;
 	for(int i = 0; i<8; i++)
 	    if(this.around[i] != null)
 		total += this.around[i].pheromones;
+	return total;
+    }
+
+    //total number of pheromones on the eight next possible case
+    public double total_next(double alpha){ 
+	double total = 0;
+	for(int i = 0; i<8; i++)
+	    if(this.around[i] != null)
+		total += Math.pow(this.around[i].pheromones,alpha);
 	return total;
     }
 
