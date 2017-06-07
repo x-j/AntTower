@@ -6,7 +6,7 @@ public class Case {
     Board board;
     int x, y; //position
     int pheromones; //amount of pheromones on this case
-    Case [] around; //WRONG //0-top 1-top_r 2-right 3-bot_r 4-bot
+    Case [] around; //0-topL 1-top 2-topR 3-right 4-botR 5-bot 6-botL 7-left
     boolean t; //true if there is a tower
     Tower tower;
     ArrayList <Ant> ants; //list of ants on this case
@@ -50,7 +50,7 @@ public class Case {
 	    around[3] = board.cases[x][y+1];
 
 	//around[4]
-	if((x == board.n-1) || (y == board.n-1))
+	if((x == board.n-1) || (y == board.m-1))
 	    around[4] = null;
 	else
 	    around[4] = board.cases[x+1][y+1];
@@ -78,23 +78,22 @@ public class Case {
     public void setPheromones(int p){pheromones += p;}
 
     //add an ant in this case
-    public void addAnt(Ant _ant){ants.add(_ant);}
+    public void addAnt(Ant _ant){ants.add(_ant);this.board.nb_ants++;}
 
     //step for a case 
     public void stepCase(){
 	//if there is ants on this case, start stepAnts() for every ants in this case
 
 	if(ants != null)
-	    //for(Ant a : ants){
 	    for(int i = 0; i < ants.size(); i++)
 		ants.get(i).stepAnts();
 
-	//if there is a tower in this case, start steTower() for this one
+	//if there is a tower in this case, start stepTower() for this one
 	if(t)
 	    tower.stepTower();
     }
 
-    //fucntion for the ant in this case to choose the next case
+    //function for the ant in this case to choose the next case
     public Case next(boolean crazy,Case previous){
 	if(crazy)
 	    return next_random(previous);
@@ -105,15 +104,18 @@ public class Case {
     //choose the next case randomly (for crazy ants)
     public Case next_random(Case previous){
 	int i;
+	for(int j = 0; j < 8; j++)
+	    if(this.around[j] == board.cases[board.xStop][board.yStop])
+		return this.around[j];
 	do{
 	    i = (int)(Math.random()*8);
-	}while(this.around[i] == null && this.around[i] != previous);
-	//until it's not null (outside)
+	}while(this.around[i] == null || this.around[i] == previous);
+	//until it's not null (outside) and it's not the previous one
 	return this.around[i];
     }
 
     //choose the next case regarding to the amount of pheromones
-    //int the "neighbour cases" to choose the best one
+    //in the "neighbour cases" to choose the best one
     public Case next_best(Case previous){
 
 	double total = (double)total_next();
@@ -123,21 +125,25 @@ public class Case {
 	int i;
 	//calcul of probabilities for "neighbour cases"
 	for(i = 0; i< 8; i++){
-	    if(this.around[i] == null)
+	    if(this.around[i] == null){
 		p[i] = 0;
-	    else
+	    }else{
+		if(this.around[i] == this.board.cases[this.board.xStop][this.board.yStop])
+		    return this.around[i];
 		p[i] = (double)(this.around[i].pheromones)/total;
+	    }
 	}
 	double random, cumulate_p;
 	do{	    
 	    random = Math.random(); //random number (double) between 0 and 1
 	    i = 0;
 	    cumulate_p = p[0];
-	    
 	    //select one case regarding to the amount of pheromones
-	    while((random >= cumulate_p) && i<7)
+	    while((random >= cumulate_p) && i<7 && cumulate_p<1)
 		cumulate_p += p[++i];
-	}while(this.around[i] == null && this.around[i] != previous);
+	    if(cumulate_p == 1 && this.around[i] == previous)
+		return next_random(previous);
+	}while(this.around[i] == null || this.around[i] == previous);
 
 	return this.around[i];
     }
