@@ -9,12 +9,12 @@ public class Ant {
     boolean crazy; //true if it moves randomly
     int steps; //number of steps traveled
     boolean alive;
-    int pheromones; //amount of pheromones that the ant transport
+    double pheromones; //amount of pheromones that the ant transport
     boolean moved; // if it moved this round
     ArrayList <Case> traveled_case; //list of traveled cases
 
     public Ant(boolean _first,boolean _crazy, Board _board){
-	pheromones = 100;
+	pheromones = 1.0;
 	first = _first;
 	board = _board;
 	current = board.cases[board.xStart][board.yStart]; //starting case
@@ -63,7 +63,7 @@ public class Ant {
      //when the ant reach the stop, pheromones are set on its path
      public void finished(){
 	 for(Case c : traveled_case)
-	     c.setPheromones(pheromones/steps);
+	     c.setPheromones(1.0/((double)steps));
 	 this.killed();
      }
  }
